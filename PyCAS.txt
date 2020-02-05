@@ -1,0 +1,71 @@
+2/3
+what is goal? solve simple eqs? integration? diff eqs?
+how evaluate? prefix? postfix? smth else? numerical approximation? exact answer?
+what if there's variable? how simplify? what is considered simplest form?
+how simplify?
+parsing? priorities of operators? variable names that are more than 1 character? subscripts?
+built in constants such as gravitational constant and planck's constant? should these constants be stored separately or is there a fundamental constant from which all other constants can be calculated?
+should mathematical constants such as e and pi be stored as their values or formulas than can be used to evaluate them to arbitrary precisions?
+
+postfix evaluation (0)
+unary operators? proof of concept code works (1) --> operators with any number of arguments should work
+make list of dictionaries for operators that take different numbers of arguments?
+put all operators in dictionary and use varargs? is there varargs in python?
+string efficiency?
+what about more complicated operators that involve expressions with variables such as summation?
+
+next steps:
+test list of dictionaries approach and 1 dictionary + varargs approach
+implement the tree approach to representing and evaluating an expression
+implement infix notation parsing (define operator precedence)
+introduce variables (postfix expression evaluation is probably not gonna work?)
+find a way to represent equations
+create a procedure that can solve any expression with only the operators +, -, *, and /
+implement detection of syntax errors and arithmetic errors (e.g. divide by 0)
+implement evaluation of an expression with variables when the values of the variables are given
+
+2/4
+is postfix evaluation useful at all?
+convert code to tree approach (prefix evaluation)
+weird tree construction function
+1 (2) dictionary is much faster than list of dictionaries
+no varargs needed
+convert tree to infix
+does parenthesization matter for non-binary operators? (currently only implemented for binary operators
+
+next steps:
+introduce variables
+find a way to represent equations
+create a procedure that can solve any equation with only the operators +, -, *, and /
+
+2/5
+realized that +, -, *, and / means that polynomials are allowed which is no bueno
+therfore limit objective to solving linear equations only
+definition: a term is any subtree of an expression tree; a subterm is any subtree of a term
+a linear equation is an equation that can be written in the form of f(x) = 0 where f(x) is a linear function of x
+a linear function of x is hereby defined as a term that only contains one x which is not contained within a subterm that is a denominator
+why can't it be in a denominator? can it, as long as there is only one x? if x can be in the subtrahend, why can't it be in the denominator? let's deal with it later since i just thought of a lot of stuff in shower
+was solving f(x) = + - + / - * 21 x 2 7 / * 3 x 4 * 6 x 12 which is (21 * x - 2) / 7 + 3 * x / 4 - 6 * x + 12, thanks to the infix notation converter i wrote (idk what to call it, it's not a parser cuz it's not translating input?)
+and i was trying to solve a subproblem of it, which is combining the terms (21 * x - 2) / 7 and 3 * x / 4, which requires (does it really require this? now i am skeptical of everything) the distribution of / 7 in the 1st term
+then i thought about how a program would recognize the necessity or the conditions for which this is possible, then it turned into me reinventing abstract algebra (not really but i wanna sound cool)
+also i learned a tiny little bit of abstract alg before and i wish i didnt learn it
+but also the only things i remember are abelian groups, monoids (i forgot what this is though), 0 element, inverse element, stuff like that
+anyways i started with defining x * n = x + x + ... + x (n x's) (will now be abbreviated as ...n...), where + and * are generic operators that do not necessarily represent addition and multiplication
+and then i claimed that (a + b) * n = a * n + b * n and proceeded to prove this statement
+(a + b) * n = by definition = (a + b) + (a + b) + ...n... + (a + b)= (a + a + ...n... + a) + (b + b + ...n... + b) = a * n + b * n
+i believe that this requires the + operator to satisfy two properties: commutativity (for moving terms around) and associativity (for grouping)
+maybe transitivity for substituting (a + a + ...n... a) with a * n? what even is transitivity i forgot; but anyways it wouldn't be a property of the + operator since it involves the * operators
+since i implemented operators as functions in my code, i rewrote it in terms of functions
+also commutativity and associativity are really confusing i even started questioning if they're the same thing i'm still kinda confused
+let f^n(x) = f(f(...n...f(x, x)...)) for n > 0 and f^0(x) = x
+if f(a, b) = f(b, a) and f(a, f(b, c)) = f(f(a, b), c) and let g(a, n) = f^(n - 1)(a), then g(f(a, b), n) = f(g(a, n), g(b, n))
+then i went to shower and thought about it and realized that defining g(a, n) as equal to f^(n - 1)(a) restricts the second argument for g to be a natural number (my definition is so flawed that n can't even equal to 0)
+anyways then i started thinking how to define such g on the set of all real numbers and i thought this is kinda similar to the analytic continuation of the riemann zeta function since it's defining a function on where it wasn't originally defined...
+honestly idk what i am talking about
+anyways i guess now the goal is to find a way to define g from f such that g is, like f, defined on the set of all real numbers
+also i don't want to search this stuff up just for the challenge and i will restrict myself to only search for syntax related questions throughout this entire project
+oh yea i was thinking about inverses and i was wondering if the combination of a definition of g on all integers (whole numbers?) along with the inverse function of g can be used to extend the domain of g to all real numbers
+also although i am trying to be as mathematically rigorous as possible, i am probably missing and assuming a lot of stuff
+e.g. i'm not going to define what natural numbers, whole numbers, real numbers are
+i never even tried to understand what the peano axioms actually say so oh well
+also today is actually 2/4 and it's 11:49 pm right now but i felt like writing this under 2/5
